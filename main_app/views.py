@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Player, PlayerBadge
-from .forms import GamePerformanceForm
+from .forms import GamePerformanceForm, PlayerBadgeForm, PlayerForm
 
 
 # Create your views here.
@@ -20,18 +20,26 @@ def players_index(request):
 def players_detail(request, player_id):
   player = Player.objects.get(id=player_id)
   id_list = player.playerbadges.all().values_list('id')
-  playerbadges_player_doesnt_have = PlayerBadge.objects.exclude(id_in=id_list)
+  # playerbadges_player_doesnt_have = PlayerBadge.objects.exclude(id_in=id_list)
   game_performance_form = GamePerformanceForm()
+  player_badge_form = PlayerBadgeForm()
+  player_form = PlayerForm()
   return render(request, 'players/detail.html', {
     'player': player,
     'game_performance_form': game_performance_form,
-    'playerbadges': playerbadges_player_doesnt_have,
+    'player_badge_form': player_badge_form,
+    'player_form': player_form,
+    # 'playerbadges': playerbadges_player_doesnt_have,
   })
 
 class PlayerCreate(CreateView):
   model = Player
-  fields = '__all__'
+  fields = ['name', 'age', 'primary_position', 'secondary_position']
   success_url = '/players'
+
+  def form_valid(self, form):
+    form.instance.user = self.request.user
+    return super().form_valid(form)
 
 class PlayerUpdate(UpdateView):
   model = Player
@@ -58,3 +66,28 @@ def add_game_performance(request, player_id):
   return redirect('players_detail', player_id=player_id)
 
 
+# class PlayerBadgeList(ListView):
+#   model = PlayerBadge
+
+# class PlayerBadgeDetail(DetailView):
+#   model = PlayerBadge
+
+# class PlayerBadgeCreate(CreateView):
+#   model = PlayerBadge
+#   fields = '__all__'
+
+# class PlayerBadgeUpdate(UpdateView):
+#   model = PlayerBadge
+#   fields = ['name', 'color']
+
+# class PlayerBadgeDelete(DeleteView):
+#   model = PlayerBadge
+#   success_url = '/PlayerBadges'
+
+# def assoc_playerbadge(request, player_id, playerbadge_id):
+#   Player.objects.get(id=player_id).playerbadges.add(playerbadge_id)
+#   return redirect('detail', player_id=player_id)
+
+# def un_assoc_playerbadge(request, player_id, playerbadge_id):
+#   Player.objects.get(id=player_id).playerbadges.remove(playerbadge_id)
+#   return redirect('detail', player_id=player_id)

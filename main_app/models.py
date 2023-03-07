@@ -22,8 +22,8 @@ class Player(models.Model):
   primary_position = models.CharField(max_length=30)
   secondary_position = models.CharField(max_length=50)
 
-  playerbadges = models.ManyToManyField(PlayerBadge)
-  user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+  playerbadges = models.ManyToManyField(PlayerBadge, blank=True, null=True)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   
   def __str__(self):
     return f"{self.name}"
