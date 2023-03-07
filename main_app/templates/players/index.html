@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h1>The Roster</h1>
+  
+{% for player in players %}   
+  <a href="{% url 'players_detail' player.id %}">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ player.name }}</span>
+        <h1>{{ player.id }}</h1>
+        <p>Primary Position: {{ player.primary_position }}</p>
+        <p>Secondary Position: {{ player.secondary_position }}</p>
+        {% if player.age > 22 %}
+          <p>Age: {{ player.age }}</p>
+        {% else %}
+          <p>Age: Rookie</p>
+        {% endif %}
+      </div>
+    </div>
+  </a> 
+{% endfor %}
+<footer>All Rights Reserved, &copy; 2022 Player Collector</footer>
+
+{% endblock %}

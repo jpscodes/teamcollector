@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h1>About the Index</h1>
+  
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">{{ player.name }}</span>
+      <p>Primary Position: {{ player.primary_position }}</p>
+      <p>Secondary Position: {{ player.secondary_position }}</p>
+      <p>Age: {{ player.age }}</p>
+      {% if player.paid == True %}
+        <p>Has Paid Already</p>
+      {% else %}
+        <p>Paid Team Dues: Negative</p>
+      {% endif %}
+      <div class="card-action">
+        <a href="{% url 'player_update' player.id %}">Edit</a>
+        <a href="{% url 'player_delete' player.id %}">Delete</a>
+      </div>      
+    </div>
+    <div class="col s6">
+      <form action="{% url 'add_game_performance' player.id %}" method="POST">
+        {% csrf_token %}
+        <!-- Render the inputs -->
+        {{ game_performance_form.as_p }}
+        <input type="submit" class="btn" value="Add Game Performace">
+      </form>
+      <table class="striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>At Bats</th>
+            <th>Hits</th>
+            <th>Review</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for gameperformance in player.gameperformance_set.all %}
+            <tr>
+              <td>{{gameperformance.date}}</td>
+              <td>{{gameperformance.at_bats}}</td>
+              <td>{{gameperformance.hits}}</td>
+              <td>{{gameperformance.review}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row">
+    <div class="col s6">
+      <h3>{{ player.name }}'s playerbadges</h3>
+      {% if player.playerbadges.count %}
+        {% for playerbadge in player.playerbadges.all %}
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+                A <span style="color: {{ playerbadge.color }}">{{ playerbadge.color }}</span> {{ playerbadge.name }}
+              </span>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h5>No playerbadges :(</h5>
+      {% endif %}
+    </div>
+    <!-- Available playerbadges will come after this line -->
+    <div class="col s6">
+      <h3>Available Player Badges</h3>
+      {% if playerbadges.count %}
+        {% for playerbadge in playerbadges.all %}
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+                A <span style="color: {{ playerbadge.color }}">{{ playerbadge.color }}</span> {{ playerbadge.name }}
+              </span>
+            </div>
+            <div class="card-action">
+              <form action="" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h5>{{cat.name}} Already Has All Player Badges Available</h5>
+      {% endif %}
+    </div>
+  </div>  
+
+  <footer>All Rights Reserved, &copy; 2022 Player Collector</footer>
+  <script>
+    const dateEl = document.getElementById('id_date');
+    // M is Materialize's global variable
+    M.Datepicker.init(dateEl, {
+      format: 'yyyy-mm-dd',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+
+    const selectEl = document.getElementById('id_gameperformance');
+    M.FormSelect.init(selectEl);
+  </script>
+{% endblock %}
