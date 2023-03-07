@@ -75,6 +75,7 @@
           <div class="card">
             <div class="card-content">
               <span class="card-title">
+                <p>{{playerbadg.name}}</p>
                 <!-- A <span style="color: {{ playerbadge.color }}">{{ playerbadge.color }}</span> {{ playerbadge.name }} -->
               </span>
             </div>
@@ -87,11 +88,11 @@
           </div>
         {% endfor %}
       {% else %}
-        <h5>{{cat.name}} Already Has All Player Badges Available</h5>
+        <h5>{{player.name}} Already Has All Player Badges Available</h5>
+        <h5>{{playerbadge.name}} They are here in {{ playerbadge.color }}</h5>
       {% endif %}
     </div>
   </div>  
-
   <footer>All Rights Reserved, &copy; 2022 Player Collector</footer>
   <script>
     const dateEl = document.getElementById('id_date');

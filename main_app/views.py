@@ -72,9 +72,9 @@ def add_game_performance(request, player_id):
 # class PlayerBadgeDetail(DetailView):
 #   model = PlayerBadge
 
-# class PlayerBadgeCreate(CreateView):
-#   model = PlayerBadge
-#   fields = '__all__'
+class PlayerBadgeCreate(CreateView):
+  model = PlayerBadge
+  fields = '__all__'
 
 # class PlayerBadgeUpdate(UpdateView):
 #   model = PlayerBadge
